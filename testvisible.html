@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
+    <script type="text/javascript" src="js/knockout-2.2.0.js"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry&sensor=true_or_false"></script>
+    <script type="text/javascript" src="js/data.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    </head>
+    <body>
+
+<style>
+    .container {
+        font-size: 24px;
+    }
+    
+    .open-sidebar {
+        color:  green;
+    }
+    
+    
+</style>
+
+<div data-bind="visible: shouldShowList">
+    You will see this message only when "shouldShowMessage" holds a true value.
+</div>
+ 
+<script type="text/javascript">
+    var viewModel = {
+        shouldShowList: ko.observable(true) // Message initially visible
+    };
+    viewModel.shouldShowList(false); // ... now it's hidden
+    viewModel.shouldShowList(true); // ... now it's visible again
+</script>
+
+
+
+        
+    </body>
+</html>

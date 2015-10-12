@@ -18,18 +18,15 @@
     </head>
     <body>
 
-    <div class="container">
+    <div class="container" data-bind="css: { opensidebar: openSidebar() != false }">
         <div id="sidebar" style="overflow-y: scroll;">
             <div class="form-wrapper cf">
-                <input data-bind="value: userInput" />
-                <button data-bind="click: filterMarkers"><i class="fa fa-search"></i></button>
             </div>
-            <div data-bind="html: modelLinks"></div>
         </div>
 
         <div class="main-content">
             <div class="swipe-area"></div>
-            <a href="#" data-toggle=".container" id="sidebar-toggle">
+            <a href="#" data-toggle =".container" id="sidebar-toggle">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -39,12 +36,13 @@
             </div>
         </div>
 
-    </div>
+    </div> 
 
 <script type="text/javascript">
     var markers = [];
     var prev_infowindow = false;
     var prev_marker;
+    var toggle = false;
     var hldHTML = "<ul>";
     var cleanHTML = "";
     var newBorder = " style='border-left: 4px solid #FFF;' ";
@@ -52,10 +50,9 @@
     var viewModel = {
         filterMarkers: ko.observable(),
         userInput: ko.observable(),
-        modelLinks: ko.observable()
+        modelLinks: ko.observable(),
+        openSidebar: ko.observable()
     };
-
-
 
     var koViewModel = function (map, courses) {
         var self = this;
@@ -112,6 +109,9 @@
 
         cleanHTML = hldHTML;
         self.modelLinks = ko.observable(hldHTML);
+
+        self.openSidebar = true;
+
         self.userInput = ko.observable('');
 
         // Search Feature
@@ -148,7 +148,7 @@
 
     };
 
-    function createMap() {
+        function createMap() {
         return new google.maps.Map(document.getElementById('map'), {
             center: { lat: 33.444735, lng: -84.453223 },
             zoom: 11,
@@ -179,8 +179,6 @@
 
         //        self.modelLinks = ko.observable(hldHTML);
     }
-
-    ko.applyBindings(viewModel);
 
 </script>
 

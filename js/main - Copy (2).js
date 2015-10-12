@@ -2,14 +2,15 @@
 var viewModal = {
 	modalTitle: ko.observable(),
 	modalImage: ko.observable(),
-	modalLinks: ko.observable()
+	modalLinks: ko.observable(),
+	newStyles: ko.observable(),
+	newStyle2: ko.observable()
 };
 
 
 var markers = [];
 var hldHTML;
 var cleanHTML;
-var newBorder = " style='border-left: 4px solid #FFF;' ";
 
 var locations = courses.slice(0);
 
@@ -60,7 +61,6 @@ function initialize() {
 		hldHTML = hldHTML + "<li id='liCourse" + i + "'><a href='#' onclick='myClick(" + i + ");'><span class='lstTitle'>" + locations[i].name + "</span><br><span class='lstAddress'>" + locations[i].address + "</span></a></li>";
 	}
 
-	cleanHTML = hldHTML;
     viewModal.modalLinks(hldHTML);
 
 }
@@ -71,14 +71,17 @@ function myClick(id, clickChk) {
 		google.maps.event.trigger(markers[id], 'click');
 	}
 
-    // Turn Off all of the List Highlights by Restoring the Original Code
-	hldHTML = cleanHTML;
+    // Turn Off all of the List Highlights
+	for (i = 0; i < locations.length; i++) {
+		var liId = "#liCourse" + i;
+		viewModal.newStyle2("border-left", "2px solid #FFF");
+//		$(liId).css("border-left", "0px solid #FFF");
+	}
 
     // Turn on the Specific Item Highlight
-	liId = "liCourse" + id;
-	var position = hldHTML.search(liId)-4;
-	var hldHTML = hldHTML.substr(0, position) + newBorder + hldHTML.substr(position);
-    viewModal.modalLinks(hldHTML);
+	liId = "#liCourse" + id;
+	viewModal.newStyle2("border-left", "4px solid #FFF");
+//	$(liId).css("border-left", "4px solid #FFF");
 }
 
 // More Photos was Clicked, Pull in the Photos from Flickr
@@ -97,16 +100,16 @@ function showPhotos(id) {
 	        hldHTML = hldHTML + "<li class='col-lg-2 col-md-2 col-sm-3 col-xs-4'><img class='img-responsive' src='" + src + "' alt='" + item.title + "' /></li>";
 	        imgCounter++;
 	        if (i == 10) return false;
-	    });
+	    })
 	    if (imgCounter == 0) {
 	        hldHTML = hldHTML + "<li class='col-lg-2 col-md-2 col-sm-3 col-xs-4'><img class='img-responsive' src='images/noimages.jpg' alt='No Images Available' /></li>";
-	    }
+	    };
 	    hldHTML = hldHTML + "</ul>";
 	    viewModal.modalImage(hldHTML);
 	    $("#flickrModal").slideDown('slow');
 	}).fail(function () {
-	    console.log("Error in the JSON Flickr Request");
-	});
+	        console.log("Error in the JSON Flickr Request");
+	    });
 
 }
 
@@ -159,7 +162,6 @@ function deleteMarkers() {
 $(window).load(function() {
 	$("[data-toggle]").click(function() {
 		var toggle_el = $(this).data("toggle");
-
 		$(toggle_el).toggleClass("open-sidebar");
 	});
 	$(".swipe-area").swipe({

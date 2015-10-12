@@ -18,7 +18,8 @@
     </head>
     <body>
 
-    <div class="container">
+    <div class="container" data-bind="css: { openSidebar: openSidebar() != false }">  
+<!--    <div class="container openSidebar"> -->
         <div id="sidebar" style="overflow-y: scroll;">
             <div class="form-wrapper cf">
                 <input data-bind="value: userInput" />
@@ -29,7 +30,7 @@
 
         <div class="main-content">
             <div class="swipe-area"></div>
-            <a href="#" data-toggle=".container" id="sidebar-toggle">
+            <a href="#" data-toggle =".container" id="sidebar-toggle">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -45,6 +46,7 @@
     var markers = [];
     var prev_infowindow = false;
     var prev_marker;
+    var toggle = false;
     var hldHTML = "<ul>";
     var cleanHTML = "";
     var newBorder = " style='border-left: 4px solid #FFF;' ";
@@ -52,9 +54,9 @@
     var viewModel = {
         filterMarkers: ko.observable(),
         userInput: ko.observable(),
-        modelLinks: ko.observable()
+        modelLinks: ko.observable(),
+        openSidebar: ko.observable()
     };
-
 
 
     var koViewModel = function (map, courses) {
@@ -112,6 +114,7 @@
 
         cleanHTML = hldHTML;
         self.modelLinks = ko.observable(hldHTML);
+
         self.userInput = ko.observable('');
 
         // Search Feature
@@ -180,7 +183,11 @@
         //        self.modelLinks = ko.observable(hldHTML);
     }
 
+    toggle = !toggle;  
+    viewModel.openSidebar(toggle);
+
     ko.applyBindings(viewModel);
+
 
 </script>
 

@@ -39,6 +39,20 @@
             </div>
         </div>
 
+    </div> 
+
+    <div id="flickrModal">
+        <div class="modalLeft">
+            <div data-bind="html: modelTitle"></div>
+        </div>
+        <div class="modalRight">
+            <i style="font-size: 36px;" onclick="closePhotos()" class="fa fa-close fa-lg"></i>
+        </div>
+        <div class="clear"></div>
+            <div class="containers">
+                <div data-bind="html: modelImage"></div>
+            </div>
+        </div>
     </div>
 
 <script type="text/javascript">
@@ -52,10 +66,12 @@
     var viewModel = {
         filterMarkers: ko.observable(),
         userInput: ko.observable(),
-        modelLinks: ko.observable()
+        modelLinks: ko.observable(),
+        modelTitle: ko.observable(),
+        modelImage: ko.observable()
     };
 
-
+    $("#flickrModal").hide();
 
     var koViewModel = function (map, courses) {
         var self = this;
@@ -178,6 +194,42 @@
         viewModel.modelLinks(hldHTML);
 
         //        self.modelLinks = ko.observable(hldHTML);
+    }
+
+    function showPhotos(pName) {
+
+        var id = locations.indexOf(pName);
+        alert(id);
+
+        var hldHTML = "<h1>Flicker Photos: " + locations[id].name + "</h1>";
+        viewModal.modalTitle(hldHTML);
+
+        var hldTitle = locations[id].name;
+        var url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=c43c5ecda12e41d036d137b1ebb239b8&tags=golf&text=" + hldTitle + "&safe_search=2&per_page=20";
+        var src;
+        var imgCounter = 0;
+        hldHTML = "<ul class='row'>";
+        $.getJSON(url + "&format=json&jsoncallback=?", function (data) {
+            $.each(data.photos.photo, function (i, item) {
+                src = "http://farm" + item.farm + ".static.flickr.com/" + item.server + "/" + item.id + "_" + item.secret + "_m.jpg";
+                hldHTML = hldHTML + "<li class='col-lg-2 col-md-2 col-sm-3 col-xs-4'><img class='img-responsive' src='" + src + "' alt='" + item.title + "' /></li>";
+                imgCounter++;
+                if (i == 10) return false;
+            });
+            if (imgCounter == 0) {
+                hldHTML = hldHTML + "<li class='col-lg-2 col-md-2 col-sm-3 col-xs-4'><img class='img-responsive' src='images/noimages.jpg' alt='No Images Available' /></li>";
+            }
+            hldHTML = hldHTML + "</ul>";
+            viewModal.modalImage(hldHTML);
+            $("#flickrModal").slideDown('slow');
+        }).fail(function () {
+            console.log("Error in the JSON Flickr Request");
+        });
+    }
+
+    // Close the Modal Window
+    function closePhotos() {
+        $("#flickrModal").hide();
     }
 
     ko.applyBindings(viewModel);
